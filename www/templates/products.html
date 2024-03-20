@@ -1,0 +1,124 @@
+<ion-view class="bg01">
+  <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear" ng-click="GoToProfile()">
+      <img src="img/icon-account.png" alt="">
+    </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="left">
+    <button class="button button-icon button-clear" ng-click="GoToProfile()">
+      <img src="img/icon-home.png" alt="">
+    </button>
+  </ion-nav-buttons>
+  <ion-content scroll="false">
+    <md-tabs class="custom-tabs" ng-class="{'custom-tabs-active' : tabsWidth}" md-selected="tabs.selectedIndex"
+      md-align-tabs="bottom" md-no-ink-bar>
+      <!-- <md-tabs class="custom-tabs" md-stretch-tabs="tabsWidth" md-selected="tabs.selectedIndex" md-align-tabs="bottom" md-no-ink-bar> -->
+
+      <!-- Tabs 01 -->
+      <md-tab ng-click="ChangeCategory(o.id,o.Title)" ng-repeat="o in LstCategories">
+        <md-tab-label>
+          <h3>{{o.Title}}</h3>
+        </md-tab-label>
+        <md-tab-body>
+          <ion-content on-swipe-left="next($index + 1)" on-swipe-right="previous($index + 1)">
+            <ion-list class="items-list">
+              <!-- item 01 -->
+              <ion-item ng-repeat="item in LstCat_Product  track by $index">
+                <div class="col3row">
+                  <div class="col01" ng-click="opendescription(item)">
+                    <img ng-src="{{item.p_info.FileName}}" on-error-src="img/no-item-img-found.png" class="itemImg" alt="">
+                    <div class="itemPrice">
+                      <img src="img/rupee-indian.svg" class="inr" alt=""> {{item.DisplayPrice}} / {{item.Weight}}
+                    </div>
+                  </div>
+                  <div class="col02">
+                    <!-- <h3>{{item.Product_Weight}} {{item.DisplayWeight}}</h3> -->
+                    <h1>{{item.p_info.Name}}</h1>
+                    <h2 style="padding-top: 10px;">{{item.p_info.Sku}}</h2>
+
+                  </div>
+                  <div class="col03">
+                    <div class="itemWeight">
+                      <!-- <img src="img/icon-balance.png" alt=""> -->
+                      {{item.Product_Weight}} - {{item.DisplayWeight}}
+                    </div>
+                    <ul>
+                      <li class="active" ng-if="item.Qty > 0" ng-click="AddProduct(item,'Remove')">
+                        <img src="img/icon-minus.png" alt="">
+                      </li>
+                      <li class="" ng-if="item.Qty == 0">
+                        <img src="img/icon-minus.png" alt="">
+                      </li>
+                      <li class="" ng-click="AddProduct(item,'Add')" ng-if="item.AttributeQty > 0 && item.Qty < item.MaximumStock">
+                        <img src="img/icon-plus.png" alt="">
+                      </li>
+                      <li class="active" ng-if="item.AttributeQty == 0 || item.Qty >= item.MaximumStock">
+                        <img src="img/icon-plus.png" alt="">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </ion-item>
+              <ion-item class="text-center noFoundItem" ng-if="LstCat_Product.length==0">
+                <div class="s50"></div>
+                <img src="img/no-found.jpg" class="imgRe" alt="">
+                <div class="fs-s fc-gray-e"> No {{CategoriesName}} Product</div>
+                <div class="s50"></div>
+              </ion-item>
+              <!-- <ion-item ng-if="!noMoreProductAvailable&&LstCat_Product.length>0">
+                                <a href="" class="loadMoreItem" ng-click="GetProductsByCategory(CategoryId,CategoriesName,page)">
+                  Load More...</a>
+                            </ion-item> -->
+              <ion-infinite-scroll immediate-check="false" ng-if="!noMoreProductAvailable" on-infinite="loadMore(CategoryId,CategoriesName)"
+                distance="10%"></ion-infinite-scroll>
+            </ion-list>
+          </ion-content>
+
+
+
+        </md-tab-body>
+      </md-tab>
+
+    </md-tabs>
+  </ion-content>
+  <a href="" class="itemCart" ng-click="GoToCart()">
+    <img src="img/icon-cart.png" alt="">
+    <span ng-if="Lst_GlobalProduct.length >0">{{Lst_GlobalProduct.length}}</span>
+    <!-- <span>99</span> -->
+  </a>
+  <div class="totalRs">
+    કુલ =
+    <!-- 245 -->
+    <img src="img/rupee-indian-white.svg" alt=""> {{TotalPrice}}
+    <!-- <span ng-if="Lst_GlobalProduct.length >0" style="margin-left: 50%">({{Lst_GlobalProduct.length}})</span> -->
+  </div>
+
+
+
+
+  <script id="product-image-modal.html" type="text/ng-template">
+    <ion-modal-view class="prodInfoModal">
+            <ion-header-bar>
+                <h1>{{p_info.Name}}</h1>
+                <button class="button btnClose button-clear button-icons ion-ios-close-outline" ng-click="closeModal()">
+            </button>
+            </ion-header-bar>
+            <ion-content>
+                <img ng-src="{{p_info.FileName}}" class="prodImg" on-error-src="img/no-item-img-found.png" alt="">
+                <div class="row">
+                    <div class="col">
+                        <div class="fc-orange fw-600">Description :</div>
+                        <div class="s10"></div>
+                        <div  ng-bind-html="p_info.FullDescription" class="editorContent"></div>
+                        <!-- <div >
+                            
+                            {{p_info.FullDescription == null || p_info.FullDescription == '' ? 'N/A' : p_info.FullDescription  }}
+                        </div> -->
+                    </div>
+                </div>
+               
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+</ion-view>

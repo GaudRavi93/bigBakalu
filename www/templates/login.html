@@ -1,0 +1,51 @@
+<ion-view class="bg02" hide-nav-bar="true">
+    <ion-content class="fullH">
+        <div>
+            <form role="form" id="form" name="form" novalidate>
+                <div class="contentCenter">
+                    <div class="s20"></div>
+                    <div class="loginLogo">
+                        <img src="img/bigbakalu.png" alt="">
+                    </div>
+                    <div ng-if="IsPageLoading">
+                        <div ng-if="!IsVerifyFlg">
+                            <div class="s20"></div>
+                            <div class="fs-s fc-gray text-center">
+                                Please Verify Your Phone Number By Giving Missed Call on Missed
+                                <br>
+                                <strong class="fc-orange">"{{MissedCallNumber}}"</strong>
+                            </div>
+                            <div class="s10"></div>
+                            <div class="text-center">
+                                <input type="button" class="cBtn cBtn-orange" value="Give a Missed Call" ng-click="Call()">
+                            </div>
+
+                            <div class="s10"></div>
+                            <div class="text-center">
+                                <!-- <a href="" class="fs-xs fc-purple" ng-click="BackToLogin()">Try Again Login</a> -->
+                                <input type="button" class="cBtn cBtn-purple" ng-click="BackToLogin()" value="Try Again Login">
+                            </div>
+                        </div>
+                        <div ng-if="IsVerifyFlg">
+                            <div class="s50"></div>
+                            <div class="userinputGrop">
+                                <input type="tel" name="Phone" class="userInput" placeholder="Enter Your Mobile Number" ng-required="true" ng-model="model.phone"
+                                    numbers-only ng-maxlength="10" ng-minlength="10">
+                            </div>
+                            <span class="errorMsg" ng-show="formsubmit && (form.Phone.$dirty || form.Phone.$invalid)">
+                                <span ng-show="form.Phone.$error.required"> Please Enter Mobile Number</span>
+                                <span ng-show="form.Phone.$error.maxlength || form.Phone.$error.minlength"> Please Enter 10 Digit Valid Mobile Number</span>
+                            </span>
+                            <div class="s10"></div>
+                            <div class="text-center">
+                                <input type="button" class="cBtn cBtn-purple" ng-click="Login(model,form)" value="Login">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s20"></div>
+                </div>
+            </form>
+        </div>
+    </ion-content>
+
+</ion-view>

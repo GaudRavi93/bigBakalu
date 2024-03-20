@@ -1,0 +1,322 @@
+<ion-view class="bg01">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-android-arrow-back" ng-click="GoToHome()">
+        </button>
+    </ion-nav-buttons>
+    <!-- <ion-nav-buttons side="right">
+    <button class="button button-icon button-clear logOut" ng-click="Logout()">
+      <i class="fa fa-sign-out" aria-hidden="true"></i>
+    </button>
+  </ion-nav-buttons> -->
+
+    <md-tabs class="custom-tabs" md-no-pagination="true" md-selected="tabs.selectedIndex" md-stretch-tabs="always"
+        md-align-tabs="bottom" md-no-ink-bar>
+        <!-- Tabs 01 -->
+        <md-tab ng-click="GetUserInfo()">
+            <md-tab-label>
+                <h3>Profile</h3>
+            </md-tab-label>
+            <md-tab-body>
+                <ion-content scroll="false" on-swipe-left="next()" on-swipe-right="previous()">
+                    <div class="container">
+                        <div class="s20"></div>
+                        <div class="fs-m fc-purple">
+                            <i class="fa fa-user" aria-hidden="true"></i> Profile Information
+                        </div>
+                        <div class="s20"></div>
+                        <form action="" class="cForm" name="cForm" id="cForm">
+                            <label for="">
+                                <i class="fa fa-address-book-o" aria-hidden="true"></i> Contact Name :</label>
+                            <input type="text" ng-model="model.ProfileName" class="formControl">
+                            <div class="s20"></div>
+
+                            <label for="">
+                                <i class="fa fa-phone" aria-hidden="true"></i> Mobile Number :</label>
+                            <input type="text" ng-model="model.phone" class="formControl" ng-required="true"
+                                numbers-only ng-disabled="true">
+                            <div class="s20"></div>
+
+                            <label for="">
+                                <i class="fa fa-address-card-o" aria-hidden="true"></i> Address :</label>
+                            <textarea name="Address" id="Address" cols="30" rows="4" class="formControl"
+                                ng-model="model.Address"></textarea>
+                            <div class="s20"></div>
+                            <div class="row row-center w-full">
+                                <!-- <div class="col col-25"></div> -->
+                                <div class="text-center w-full">
+                                    <input type="button" class="cBtn cBtn-block cBtn-purple"
+                                        ng-disabled="cForm.$invalid" ng-click="UpdateProfile(model)"
+                                        value="Update Profile">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-6 text-center">
+                                    <input type="button" class="cBtn cBtn-block cBtn-purple"
+                                        ng-click="showRequestModal()" value="Request">
+                                </div>
+                                <div class="col col-6 text-center">
+                                    <input type="button" class="cBtn cBtn-block cBtn-purple"
+                                        ng-click="showFeedbackModal()" value="Feedback">
+                                </div>
+                            </div>
+
+                            <!-- <label for="">
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i> Email Address :</label>
+                                <input type="email" name="email" ng-model="model.email" class="formControl">
+                                <span class="error" ng-show="cForm.email.$error.email" style="color: red;">
+                                    Not valid email!</span> -->
+
+                            <div class="s10"></div>
+                        </form>
+                    </div>
+                </ion-content>
+            </md-tab-body>
+        </md-tab>
+        <!-- Tabs 02 -->
+        <md-tab ng-click="ChangeTab()">
+            <md-tab-label>
+                <h3>My Orders</h3>
+            </md-tab-label>
+            <md-tab-body>
+                <ion-content on-swipe-left="next()" on-swipe-right="previous()">
+                    <!-- ng-if="lstOrder.length == 0" -->
+                    <div ng-if="lstOrder.length == 0">
+                        <div class="s50"></div>
+                        <div>
+                            <img src="img/no-order-found.png" class="img-30" alt="">
+                        </div>
+                        <div class="fs-m fc-gray-e text-center">No Orders Found</div>
+                    </div>
+                    <ion-list class="order-list" ng-if="lstOrder.length > 0">
+                        <ion-item ng-repeat="o in lstOrder" ng-click="GoToOrderDetail(o)">
+                            <div class="col01">
+                                <i class="ion-ios-checkmark-outline"></i>
+                            </div>
+                            <div class="col02">
+                                <div class="orderNo">Order No :
+                                    <strong>{{o.PurchaseOrderNumber}}</strong>
+                                    <span
+                                        ng-class="o.tblorderstatus.OrderStatus=='Pending'? 'new' : o.tblorderstatus.OrderStatus=='Delivered' ? 'complete' : o.tblorderstatus.OrderStatus=='Canceled' ? 'cancel' :'approve' ">{{o.tblorderstatus.OrderStatus}}</span>
+                                </div>
+                                <div class="col3row">
+                                    <div class="col01">
+                                        <div class="orderDate">Ordered
+                                            <strong>{{o.CreatedOnUtc |date:'dd-MMM-yyyy'}}</strong>
+                                            <span>|</span>Items
+                                            <strong>{{o.tblorderitems.length}}</strong>
+                                        </div>
+                                        <div class="orderDate">Client No
+                                            <strong>{{o.CustomerPO}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col02">
+                                        <div class="orderItems">
+                                        </div>
+                                    </div>
+                                    <div class="col03">
+                                        <div class="orderTotal">
+                                            <strong>
+                                                <i class="fa fa-inr" aria-hidden="true"></i> {{o.OrderSubtotalInclTax
+                                                }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ion-item>
+                        <ion-infinite-scroll immediate-check="false" ng-if="!noMoreOrderAvailable"
+                            on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
+                    </ion-list>
+                </ion-content>
+            </md-tab-body>
+        </md-tab>
+    </md-tabs>
+
+
+    <script id="my-modal.html" type="text/ng-template">
+        <ion-modal-view class="orderDetails">
+            <ion-header-bar>
+                <h1 class="title">{{lstOrderDetail.BillNo}}</h1>
+                <button class="button button-clear button-icons ion-ios-close-outline" ng-click="closeModal()">
+                </button>
+            </ion-header-bar>
+            <ion-content>
+                <ion-list class="orderItemsList">
+                    <!-- item 01 -->
+                    <ion-item ng-repeat="o in lstOrderDetail.productDetail">
+                        <div class="col01">
+                            <img src="{{o.fileName}}" class="itemImg" alt="" on-error-src="img/no-item-img-found.png">
+                        </div>
+                        <div class="col02">
+                            <h1>{{o.ProductName}}</h1>
+                        </div>
+                        <div class="col03">
+
+                            <h2>
+                                <span class="fc-purple">{{o.Qty}} {{o.DisplayQty}}</span> |
+
+                                <strong class="fc-black">
+                  <i class="fa fa-inr" aria-hidden="true"></i> {{o.Price}}</strong>
+                            </h2>
+
+                            <!-- <h2>
+                <i class="fa fa-inr" aria-hidden="true"></i> {{o.Price}} | {{o.Qty}} {{o.DisplayQty}}</h2> -->
+                        </div>
+                    </ion-item>
+
+                </ion-list>
+                <div class="s20"></div>
+                <div class="container_10">
+                    <div class="row">
+                        <div class="col col-66 fs-s fc-gray-e text-right">ઓર્ડર :</div>
+                        <div class="col col-33 fs-m fc-orange text-right">
+                            <i class="fa fa-inr" aria-hidden="true"></i> {{lstOrderDetail.OrderTotal}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-66 fs-s fc-gray-e text-right"> શિપિંગ ચાર્જ:</div>
+                        <div class="col col-33 fs-m fc-orange text-right">
+                            <i class="fa fa-inr" aria-hidden="true"></i> {{lstOrderDetail.ShippingCharge}}</div>
+                    </div>
+                    <hr class="line-01">
+                    <div class="row">
+                        <div class="col col-66 fs-s fc-dGray text-right"> કુલ :</div>
+                        <div class="col col-33 fs-m fc-purple text-right">
+                            <i class="fa fa-inr" aria-hidden="true"></i>
+                            <strong>{{lstOrderDetail.GrandTotal}}</strong>
+                        </div>
+                    </div>
+                    <hr class="line-01">
+                </div>
+                <div class="container text-right">
+                    <span class="fs-s fc-gray-e" ng-if="lstOrderDetail.Email != '' && lstOrderDetail.Email != null">Email:</span>
+                    <br ng-if="lstOrderDetail.Email != '' && lstOrderDetail.Email != null">
+                    <span class="fs-s fc-purple" ng-if="lstOrderDetail.Email != '' && lstOrderDetail.Email != null">{{lstOrderDetail.Email}}</span>
+                    <div class="s10" ng-if="lstOrderDetail.Email != '' && lstOrderDetail.Email != null"></div>
+
+                    <span class="fs-s fc-gray-e">Payment Method :</span>
+                    <br>
+                    <span class="fs-s fc-purple">{{lstOrderDetail.PaymentMethod}}</span>
+                    <div class="s10"></div>
+                    <span class="fs-s fc-gray-e">Shipping Address :</span>
+                    <br>
+                    <span class="fs-s fc-purple">{{lstOrderDetail.ShippingAddress}}</span>
+                    <div class="s10"></div>
+                </div>
+                <div class="s10"></div>
+                <div class="text-center">
+                    <a href="" class="btnCencel" ng-click="CancelledOrderByCustomer(lstOrderDetail.idOrder)" ng-if="lstOrderDetail.OrderStatusId ==1 || lstOrderDetail.OrderStatusId ==2 || lstOrderDetail.OrderStatusId == 3 || o.OrderStatusId == 8">
+                        <span>Cancel</span>
+                    </a>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+
+    <script id="request.html" type="text/ng-template">
+        <ion-modal-view class="orderDetails">
+            <ion-header-bar>
+                <h1 class="title">Request</h1>
+                <button class="button button-clear button-icons ion-ios-close-outline" ng-click=closeRequestModal()>
+                </button>
+            </ion-header-bar>
+            <ion-content>
+                <div class="container">
+                    <form action="" class="cForm" name="RequestForm" id="RequestForm">
+                        <div class="s10"></div>
+                        <label for="">
+                            <i class="fa fa-comments-o" aria-hidden="true"></i> Request :</label>
+                        <textarea name="request" id="request" cols="30" rows="4" class="formControl"
+                            ng-model="rqModel.request" ng-required="true"></textarea>
+                        <div class="s20"></div>
+    
+                        <div class="text-center">
+                            <a href="" class="btnCencel" ng-click="SaveRequest(RequestForm, rqModel)">
+                                <span>Save Request</span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+
+
+    <script id="feedback.html" type="text/ng-template">
+        <ion-modal-view class="orderDetails">
+            <ion-header-bar>
+                <h1 class="title">Feedback</h1>
+                <button class="button button-clear button-icons ion-ios-close-outline" ng-click=closeFeedbackModal()>
+                </button>
+            </ion-header-bar>
+
+            <ion-content scroll="false">
+                <div class="container text-center">
+                    <form action="" class="cForm" name="FeedbackForm" id="FeedbackForm">
+                        <div class="s10"></div>
+                        <label for=""> Rating </label>
+                        <ul class="rating">
+                            <li ng-repeat="star in stars" ng-class="star" ng-class="{filled: star.filled}" ng-click="selectedRating($index)">
+                                <i class="fa fa-star"></i>
+                            </li>
+                        </ul>
+
+                        <div class="s10"></div>
+                        <label for="">
+                            <i class="fa fa-comments-o" aria-hidden="true"></i> Feedback:</label>
+                        <textarea name="Feedback" id="Feedback" cols="30" rows="4" class="formControl"
+                            ng-model="fbModel.feedback" ng-required="true"></textarea>
+                        
+                        <div class="s20"></div>
+                        <div class="text-center">
+                            <a href="" class="btnCencel" ng-click="SaveFeedback(FeedbackForm, fbModel)">
+                                <span>Save Feedback</span>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </ion-content>
+        </ion-modal-view>
+    </script>
+    <!-- <ion-footer-bar class="custFooter">
+        <div class="row row-center">
+            <div class="col col-25"></div>
+            <div class="col col-50 text-center">
+                <input type="button" class="cBtn cBtn-block cBtn-white" ng-disabled="cForm.$invalid" ng-click="UpdateProfile(model)" value="Update Profile">
+            </div>
+        </div>
+    </ion-footer-bar> -->
+
+    <style>
+        md-tabs-wrapper.md-stretch-tabs md-pagination-wrapper md-tab-item {
+            width: 50%;
+        }
+
+        .rating {
+            color: #a9a9a9;
+            margin: 0;
+            padding: 0;
+            display: inline-flex;
+            gap: 10px;
+        }
+
+        .rating li {
+            list-style-type: none;
+            display: inline-block;
+            padding: 1px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .rating .filled {
+            color: orangered;
+        }
+
+        .w-full {
+            width: 100%;
+            margin: 0px 0 7px;
+            padding: 0 5px;
+        }
+    </style>
+</ion-view>

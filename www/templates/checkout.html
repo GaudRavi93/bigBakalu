@@ -1,0 +1,195 @@
+<ion-view class="bg03">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-android-arrow-back" ng-click="GoToCart()">
+    </button>
+    </ion-nav-buttons>
+    <form class="cForm" name="cForm" id="cForm" novalidate>
+        <ion-content class="has-footer" delegate-handle="my-handle">
+            <div class="container" ng-if="iSOrderPlaced">
+                <div class="s50"></div>
+                <div class="s50"></div>
+                <div class="s30"></div>
+                <div class="text-center">
+                    <img src="img/success.png" style="width:100px;" alt="">
+                </div>
+                <div class="s10"></div>
+                <div class="fs-s fc-orange text-center">Order Successfully Placed</div>
+                <div class="s10"></div>
+                <div class="fs-s fc-gray-e text-center">Your Order Number is</div>
+                <div class="s5"></div>
+                <div class="fs-m fc-purple text-center">{{OrderId}}</div>
+                <div class="s10"></div>
+                <div class="fs-s fc-gray-e text-center">Your Client Number is</div>
+                <div class="s5"></div>
+                <div class="fs-m fc-purple text-center">{{ClientNo}}</div>
+                <div class="s30"></div>
+                <div class="fs-s fc-purple" ng-bind-html="OrderCMS"></div>
+            </div>
+            <div class="container" ng-if="!iSOrderPlaced">
+
+                <div class="s20"></div>
+                <div ng-if="!DisplayOrderSummary">
+                    <div ng-show="flgNewAddress&&lstBillAddress.length>0">
+                        <div ng-click="ChangeAddress()" class="cBtn cBtn-orange text-center">
+                            Back
+                        </div>
+                        <div class="s20"></div>
+                        <!-- <input type="text" name="CName" placeholder="Contact Person" class="formControl" ng-model="model.FirstName" ng-required="true">
+                        <span style="color: red;" class="error" ng-show="formsubmit && (cForm.CName.$dirty || cForm.CName.$invalid)">
+              <span ng-show="cForm.CName.$error.required">Please Enter Contact Person</span>
+                        </span>
+                        <div class="s10"></div>
+
+                        <input type="email" name="Email" placeholder="Email Address" class="formControl" ng-model="model.Email">
+                        <span style="color: red;" class="error" ng-show="formsubmit && (cForm.Email.$dirty || cForm.Email.$invalid)">
+              <span ng-show="cForm.Email.$error.email">Please Enter Valid Email</span>
+                        </span>
+                        <div class="s10"></div> -->
+                        <!-- <input type="text" name="PhoneNo" placeholder="Mobile Number" class="formControl" ng-model="model.PhoneNo" ng-required="true">
+            <span class="errorMsg" ng-show="formsubmit && (cForm.PhoneNo.$dirty || cForm.PhoneNo.$invalid)">
+              <span ng-show="cForm.PhoneNo.$error.required">Please Enter PhoneNo</span>
+            </span> -->
+                        <div class="s10"></div>
+
+                    </div>
+
+
+
+                    <div ng-show="!flgNewAddress">
+                        <div class="s10"></div>
+                        <button class="cBtn cBtn-block cBtn-purple" ng-click="ChangeAddress('New')">Add New Address</button>
+                        <div class="s10"></div>
+                        <label for="">Select Delivery Address</label>
+                        <div class="s10"></div>
+                        <div ng-repeat="item in lstBillAddress" class="inputAddress">
+                            <label for="">
+                <input type="radio" name="idAddress" id="idAddress" ng-model="model.SelectedAddress" value="{{item.id}}" ng-change="ChangeAddress(item.id)">
+                <div class="name">{{item.FirstName}}
+                  <span>{{item.PhoneNo}}</span>
+                </div>
+                <address>{{item.Address1}}</address>
+
+              </label>
+                            <a href="" class="rmAdd" ng-click="DeleteBillingAddress(item.id)">
+                                <i class="fa fa-times" aria-hidden="true"></i> Remove Address</a>
+                        </div>
+                        <div class="s10"></div>
+                    </div>
+
+
+                    <div ng-show="flgNewAddress">
+                        <div class="s10"></div>
+                        <!-- <input type="text" name="Area" placeholder="Area" class="formControl" ng-model="model.Area"> -->
+                        <select Name="Landmark" class="formControl" ng-model="model.idArea" ng-change="GetAllLandmarkByArea(model.idArea)">
+              <option value="">Select Area</option>
+              <option ng-repeat="o in LstArea | orderBy: 'Name'" value="{{o.id}}">{{o.Name}}</option>
+            </select>
+                        <div class="s10"></div>
+                        <!-- <input type="text" name="Landmark" placeholder="Landmark" class="formControl" ng-model="model.Landmark"> -->
+                        <select Name="Landmark" class="formControl" ng-model="model.idLandmark">
+              <option value="">Select Landmark</option>
+              <option ng-repeat="o in LstLandmark | orderBy: 'Name'" value="{{o.id}}">{{o.Name}}</option>
+            </select>
+                        <div class="s10"></div>
+                        <label for="" class="inputRadio">
+              <input type="radio" name="addressType" id="isAddress" ng-model="model.isGoogleAdd" value="0">
+              <span>Address</span>
+            </label>
+                        <label for="" class="inputRadio">
+              <input type="radio" name="addressType" id="isGoogleAdd" ng-model="model.isGoogleAdd" value="1" ng-change="SetMap()">
+              <span>Get Current Location</span>
+            </label>
+                        <div ng-if="model.SelectedAddress=='New' && model.isGoogleAdd==0">
+                            <div class="s10"></div>
+                            <textarea name="Address1" id="" cols="30" rows="4" class="formControl" placeholder="Type your Address here" ng-model="model.Address1" ng-required="true"></textarea>
+                            <span class="errorMsg" ng-show="formsubmit && (cForm.Address1.$dirty || cForm.Address1.$invalid)">
+                <span ng-show="cForm.Address1.$error.required">
+                  Please Enter Address</span>
+                            </span>
+                            <!-- <div class="s10"></div>
+                            <input type="text" name="Street" placeholder="Street/Society Name" class="formControl" ng-model="model.Street"> -->
+
+
+                            <!-- <div class="s10"></div>
+                            <input type="text" name="Pincode" placeholder="Pincode" class="formControl" ng-model="model.Pincode" ng-required="true">
+                            <span style="color: red;" class="error" ng-show="formsubmit && (cForm.Pincode.$dirty || cForm.Pincode.$invalid)">
+                <span ng-show="cForm.Pincode.$error.required">
+                  Please Enter Pincode</span>
+                            </span> -->
+                            <div class="s10"></div>
+                        </div>
+                        <div ng-if="model.SelectedAddress=='New' && model.isGoogleAdd==1">
+                            <div class="s120"></div>
+                            <div id="map" class="mapSet"></div>
+                            <div class="s10"></div>
+                            <textarea name="address" id="" cols="30" rows="4" class="formControl" placeholder="Type your Address here" ng-model="model.Address" ng-required="true"></textarea>
+                            <span style="color: red;" class="error" ng-show="formsubmit && (cForm.address.$dirty || cForm.address.$invalid)">
+                <span ng-show="cForm.address.$error.required">
+                  Please Enter Address
+                </span>
+                            </span>
+                            <div class="s20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="DisplayOrderSummary">
+
+
+                    <div class="row">
+                        <div class="col col-60 fs-m fc-gray-e text-right">
+                            ઓર્ડર :</div>
+                        <div class="col col-40 fs-m fc-orange text-left">
+                            <i class="fa fa-inr" aria-hidden="true"></i> {{model.OrderAmount}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-60 fs-m fc-gray-e text-right">
+                            શિપિંગ ચાર્જ: :</div>
+                        <div class="col col-40 fs-m fc-orange text-left">
+                            <i class="fa fa-inr" aria-hidden="true"></i> {{model.ShippingCharge}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col col-60 fs-m fc-dGray text-right"> કુલ :</div>
+                        <div class="col col-40 fs-l fc-purple text-left">
+                            <i class="fa fa-inr" aria-hidden="true"></i> {{model.OrderTotal}}</div>
+                    </div>
+                    <hr>
+                    <div class="row" ng-if="model.Email!=''">
+                        <div class="col">
+                            <span class="fs-s fc-gray-e">Email :</span>
+                            <!-- <br> -->
+                            <span class="fs-s fc-purple">{{model.Email}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <span class="fs-s fc-gray-e">Payment Method :</span>
+                            <!-- <br> -->
+                            <span class="fs-s fc-purple">Cash On Delivery</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <span class="fs-s fc-gray-e">Shipping Address :</span>
+                            <span class="fs-s fc-purple">{{model.Address}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+        <ion-footer-bar class="custFooter" style="padding: 0;" ng-if="!iSOrderPlaced">
+            <a href="" class="cBtn cBtn-block cBtn-orange cBtn-place-order cBtn-square text-center" ng-click="GoToOrderSummary(cForm)">Place Order
+        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </a>
+        </ion-footer-bar>
+        <ion-footer-bar class="custFooter" ng-if="iSOrderPlaced">
+            <div class="row row-center">
+                <div class="col text-center no-padding">
+                    <input type="button" href="" class="cBtn cBtn-block cBtn-orange" ng-click="GoToHome()" value="Home">
+                </div>
+            </div>
+        </ion-footer-bar>
+    </form>
+
+</ion-view>

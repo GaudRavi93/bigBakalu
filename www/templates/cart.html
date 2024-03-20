@@ -1,0 +1,310 @@
+<ion-view class="bg03">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-android-arrow-back" ng-if="!DisplayOrderSummary&&!iSOrderPlaced" ng-click="GoToHome()">
+    </button>
+        <button class="button button-icon button-clear ion-android-arrow-back" ng-if="DisplayOrderSummary&&!iSOrderPlaced" ng-click="GoToCart()">
+        </button>
+    </ion-nav-buttons>
+    <form class="cForm" name="cForm" id="cForm" novalidate>
+        <ion-content class="has-footer" delegate-handle="my-handle">
+            <div class="container" ng-if="iSOrderPlaced">
+                <div class="s50"></div>
+                <div class="s50"></div>
+                <div class="s30"></div>
+                <div class="text-center">
+                    <img src="img/success.png" style="width:100px;" alt="">
+                </div>
+                <div class="s10"></div>
+                <div class="fs-s fc-orange text-center">Order Successfully Placed</div>
+                <div class="s10"></div>
+                <div class="fs-s fc-gray-e text-center">Your Order Number is</div>
+                <div class="s5"></div>
+                <div class="fs-m fc-purple text-center">{{OrderId}}</div>
+                <div class="s10"></div>
+                <div class="fs-s fc-gray-e text-center">Your Client Number is</div>
+                <div class="s5"></div>
+                <div class="fs-m fc-purple text-center">{{ClientNo}}</div>
+                <div class="s30"></div>
+                <!-- <div class="fs-s fc-purple"></div> -->
+            </div>
+            <ion-list class="orderItemsList" ng-if="!DisplayOrderSummary&&!iSOrderPlaced">
+
+                <div class="custTitle">Your Order</div>
+                <div class="s10"></div>
+                <!-- item 01 -->
+                <!-- <ion-item ng-repeat="o in LstCart track by $index">
+                    <div class="col4row">
+                        <div class="col04" ng-click="RemoveFromCart(o)">
+                            <a href="">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="col01">
+                            <img ng-src="{{o.p_info.FileName}}" on-error-src="img/no-item-img-found.png" class="itemImg" alt="">
+                        </div>
+                        <div class="col02">
+                            <h1 style="font-size: 1.125em;">{{o.p_info.Name}}</h1>
+                            <h2>
+                                <i class="fa fa-inr" aria-hidden="true"></i> {{o.Price}} | {{o.Product_Weight}} {{o.DisplayWeight}}</h2>
+                        </div>
+                        <div class="col03">
+                            <ul>
+                                <li class="active" ng-if="o.Qty > 0" ng-click="AddProduct(o,'Remove')">
+                                    <img src="img/icon-minus.png" alt="">
+                                </li>
+                                <li class="" ng-if="o.Qty == 0">
+                                    <img src="img/icon-minus.png" alt="">
+                                </li>
+                                <li class="" ng-click="AddProduct(o,'Add')" ng-if="o.AttributeQty > 0 && o.Qty < o.MaximumStock">
+                                    <img src="img/icon-plus.png" alt="">
+                                </li>
+                                <li class="active" ng-if="o.AttributeQty==0 || o.Qty >= o.MaximumStock">
+                                    <img src="img/icon-plus.png" alt="">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </ion-item> -->
+
+                <ion-item ng-repeat="o in LstCart track by $index">
+                    <!-- <div class="col01">
+                            <img ng-src="{{ProductImage}}" on-error-src="img/no-item-img-found.png" class="itemImg" alt="">
+                        </div> -->
+                    <div class="col02">
+                        <h1>{{o.p_info.Name}}</h1>
+                    </div>
+                    <div class="col03">
+                        <h2>
+                            <span class="fc-purple">{{o.Product_Weight}} {{o.DisplayWeight}}</span> |
+
+                            <strong class="fc-black">
+                  {{o.Price}}</strong>
+                        </h2>
+                    </div>
+                </ion-item>
+
+            </ion-list>
+            <div ng-if="!DisplayOrderSummary&&!iSOrderPlaced">
+                <!-- <div class="s10"></div>
+                <div class="custTitle">Your Order</div>
+                <div class="s10"></div> -->
+                <!-- <ion-list class="orderItemsList">
+                   
+                    <ion-item ng-repeat="o in DisplayYourOrder.ProductList">
+                        <div class="col01">
+                            <img ng-src="{{ProductImage}}" on-error-src="img/no-item-img-found.png" class="itemImg" alt="">
+                        </div>
+                        <div class="col02">
+                            <h1>{{o.ProductName}}</h1>
+                        </div>
+                        <div class="col03">
+                            <h2>
+                                <span class="fc-purple">{{o.Qty}} {{o.Attributes}}</span> |
+
+                                <strong class="fc-black">
+                  <i class="fa fa-inr" aria-hidden="true"></i> {{o.Price}}</strong>
+                            </h2>
+                        </div>
+                    </ion-item>
+
+                </ion-list> -->
+                <div class="container_10">
+                    <div class="row">
+                        <div class="col col-66 fs-s fc-dGray text-right">ઓર્ડર કિંમત :</div>
+                        <div class="col col-33 fs-m fc-purple text-right">
+                            {{DisplayYourOrder.OrderAmount}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-66 fs-s fc-dGray text-right">
+                            ડિલિવરી ચાર્જ:</div>
+                        <div class="col col-33 fs-m fc-purple text-right">
+                            {{DisplayYourOrder.ShippingCharge}}</div>
+                    </div>
+                    <hr class="line-01">
+                    <div class="row" style="margin-top: -12px;">
+                        <div class="col col-66 fs-s fc-dGray text-right"> કુલ કિંમત:</div>
+                        <div class="col col-33 fs-m fc-black text-right">
+
+                            <strong>{{DisplayYourOrder.GrandTotal}}</strong>
+                        </div>
+                    </div>
+                    <hr class="line-01" style="margin-top: -7px;">
+                </div>
+
+                <!-- <div class="container text-left">
+                    <span class="fs-s fc-dGray">Shipping Address :</span>
+                    <br>
+                    <span class="fs-s fc-purple">{{DisplayYourOrder.Address}}</span>
+                    <div class="s10"></div>
+                </div> -->
+
+
+            </div>
+            <div class="container" ng-if="!DisplayOrderSummary&&!iSOrderPlaced">
+
+                <!-- <div ng-show="flgNewAddress&&lstBillAddress.length>0">
+                            <div ng-click="ChangeAddress()" class="cBtn cBtn-orange text-center">
+                                Back
+                            </div>
+                            <div class="s20"></div>
+                            <input type="text" name="CName" placeholder="Contact Person" class="formControl" ng-model="model.FirstName" ng-required="true">
+                                <span style="color: red;" class="error" ng-show="formsubmit && (cForm.CName.$dirty || cForm.CName.$invalid)">
+                      <span ng-show="cForm.CName.$error.required">Please Enter Contact Person</span>
+                                </span>
+                                <div class="s10"></div>
+        
+                                <input type="email" name="Email" placeholder="Email Address" class="formControl" ng-model="model.Email">
+                                <span style="color: red;" class="error" ng-show="formsubmit && (cForm.Email.$dirty || cForm.Email.$invalid)">
+                      <span ng-show="cForm.Email.$error.email">Please Enter Valid Email</span>
+                                </span>
+                                <div class="s10"></div>
+                         <input type="text" name="PhoneNo" placeholder="Mobile Number" class="formControl" ng-model="model.PhoneNo" ng-required="true">
+                    <span class="errorMsg" ng-show="formsubmit && (cForm.PhoneNo.$dirty || cForm.PhoneNo.$invalid)">
+                      <span ng-show="cForm.PhoneNo.$error.required">Please Enter PhoneNo</span>
+                    </span>
+                            <div class="s10"></div>
+    
+                        </div> -->
+
+
+
+                <div ng-show="!flgNewAddress">
+                    <!-- <div class="s10"></div> -->
+                    <!-- <button class="cBtn cBtn-block cBtn-purple" ng-click="ChangeAddress('New')">Add New Address</button> -->
+                    <!-- <div class="s10"></div>-->
+                    <label for=""> Delivery Address</label>
+                    <div class="s10"></div>
+                    <div class="inputAddress">
+                        <label for="">
+                    <input type="radio" name="idAddress" id="idAddress" ng-model="model.SelectedAddress" value="{{lstBillAddress.id}}">
+                    <div class="name">{{lstBillAddress.FirstName}}
+                      <span>{{lstBillAddress.PhoneNo}}</span>
+                    </div>
+                    <address>{{lstBillAddress.Address1}}</address>
+                    <div class="s10"></div>
+                  </label>
+                        <!-- <a href="" class="rmAdd" ng-click="DeleteBillingAddress(lstBillAddress.id)">
+                                    <i class="fa fa-times" aria-hidden="true"></i> Remove Address</a> -->
+                    </div>
+
+                </div>
+
+
+                <div ng-show="flgNewAddress">
+                    <div class="s10"></div>
+                    <!-- <input type="text" name="Area" placeholder="Area" class="formControl" ng-model="model.Area"> -->
+                    <select Name="AreaName" class="formControl" ng-model="model.idArea" ng-change="GetAllLandmarkByArea(model.idArea)" ng-required="true">
+                  <option value="">Select Area</option>
+                  <option ng-repeat="o in LstArea | orderBy: 'Name'" value="{{o.id}}">{{o.Name}}</option>
+                </select>
+                    <span style="color: red;" class="errorMsg" ng-show="formsubmit && (cForm.AreaName.$dirty || cForm.AreaName.$invalid)">
+                    <span ng-show="cForm.AreaName.$error.required">
+                      Please Enter Area</span>
+                    </span>
+                    <div class="s10"></div>
+                    <!-- <input type="text" name="Landmark" placeholder="Landmark" class="formControl" ng-model="model.Landmark"> -->
+                    <!-- <select Name="Landmark" class="formControl" ng-model="model.idLandmark">
+                  <option value="">Select Landmark</option>
+                  <option ng-repeat="o in LstLandmark | orderBy: 'Name'" value="{{o.id}}">{{o.Name}}</option>
+                </select> -->
+                    <div class="s10"></div>
+                    <label for="" class="inputRadio">
+                  <input type="radio" name="addressType" id="isAddress" ng-model="model.isGoogleAdd" value="0">
+                  <span>Address</span>
+                </label>
+                    <label for="" class="inputRadio">
+                  <input type="radio" name="addressType" id="isGoogleAdd" ng-model="model.isGoogleAdd" value="1" ng-change="SetMap()">
+                  <span>Get Current Location</span>
+                </label>
+                    <div ng-if="model.SelectedAddress=='New' && model.isGoogleAdd==0">
+                        <div class="s10"></div>
+                        <textarea name="Address1" id="" cols="30" rows="4" class="formControl" placeholder="Type your Address here" ng-model="model.Address1" ng-required="true"></textarea>
+                        <span class="errorMsg" ng-show="formsubmit && (cForm.Address1.$dirty || cForm.Address1.$invalid)">
+                    <span ng-show="cForm.Address1.$error.required">
+                      Please Enter Address</span>
+                        </span>
+                        <!-- <div class="s10"></div>
+                                    <input type="text" name="Street" placeholder="Street/Society Name" class="formControl" ng-model="model.Street"> -->
+                        <!-- <div class="s10"></div>
+                                    <input type="text" name="Pincode" placeholder="Pincode" class="formControl" ng-model="model.Pincode" ng-required="true">
+                                    <span style="color: red;" class="error" ng-show="formsubmit && (cForm.Pincode.$dirty || cForm.Pincode.$invalid)">
+                        <span ng-show="cForm.Pincode.$error.required">
+                          Please Enter Pincode</span>
+                                    </span> -->
+                        <div class="s10"></div>
+                    </div>
+                    <div ng-if="model.SelectedAddress=='New' && model.isGoogleAdd==1">
+                        <div class="s120"></div>
+                        <div id="map" class="mapSet"></div>
+                        <div class="s10"></div>
+                        <textarea name="address" id="" cols="30" rows="4" class="formControl" placeholder="Type your Address here" ng-model="model.Address" ng-required="true"></textarea>
+                        <span style="color: red;" class="error" ng-show="formsubmit && (cForm.address.$dirty || cForm.address.$invalid)">
+                    <span ng-show="cForm.address.$error.required">
+                      Please Enter Address
+                    </span>
+                        </span>
+                        <div class="s20"></div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="s10"></div>
+            <div class="noticeArea" ng-if="OrderCMS!=''&&OrderCMS!=null&&OrderCMS!=undefined && !DisplayOrderSummary&&!iSOrderPlaced">
+                <div class="fs-s fw-700 fc-purple text-center">Notice</div>
+                <hr class="line-01">
+                <div class=" fs-s fc-dGray">
+                    <div ng-bind-html="OrderCMS"></div>
+                    <!-- - Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                    <br> - Li Europan lingues es membres del sam familie. Lor separat existentie es
+                    <br> - One morning, when Gregor Samsa woke from troubled
+                    <br> - Sed ut perspiciatis unde omnis iste natus error -->
+                </div>
+                <div class="s10"></div>
+            </div>
+            <!-- </ion-content> -->
+            <!-- <ion-footer-bar class="custFooter" style="padding: 0;" ng-if="!iSOrderPlaced">
+                <a href="" class="cBtn cBtn-block cBtn-orange cBtn-place-order cBtn-square text-center" ng-click="GoToOrderSummary(cForm)">Place Order
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </a>
+            </ion-footer-bar>
+            <ion-footer-bar class="custFooter" ng-if="iSOrderPlaced">
+                <div class="row row-center">
+                    <div class="col text-center no-padding">
+                        <input type="button" href="" class="cBtn cBtn-block cBtn-orange" ng-click="GoToHome()" value="Home">
+                    </div>
+                </div>
+            </ion-footer-bar> -->
+
+        </ion-content>
+
+        <ion-footer-bar class="custFooter" ng-if="!iSOrderPlaced&&DisplayOrderSummary">
+            <div class="row row-center">
+                <div class="col col-60 text-center no-padding">
+                    <div class="fs-m fw-700 fc-white">
+                        કુલ :&nbsp;
+                        <span>
+              <i class="fa fa-inr" aria-hidden="true"></i> {{TotalAmount}}</span>
+                    </div>
+                </div>
+                <div class="col col-40 text-center no-padding" ng-click="GoToOrderSummary(cForm)">
+                    <a href="" class="cBtn cBtn-block cBtn-orange cBtn-square">Check out
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </a>
+                </div>
+            </div>
+        </ion-footer-bar>
+        <ion-footer-bar class="custFooter" style="padding: 0;" ng-if="!iSOrderPlaced&&!DisplayOrderSummary">
+            <a href="" class="cBtn cBtn-block cBtn-orange cBtn-place-order cBtn-square text-center" ng-click="GoToOrderSummary(cForm)">Place Order
+        <!-- <i class="fa fa-arrow-right" aria-hidden="true"></i> -->
+      </a>
+        </ion-footer-bar>
+        <ion-footer-bar class="custFooter" ng-if="iSOrderPlaced">
+            <div class="row row-center">
+                <div class="col text-center no-padding">
+                    <input type="button" href="" class="cBtn cBtn-block cBtn-orange" ng-click="GoToHome()" value="Home">
+                </div>
+            </div>
+        </ion-footer-bar>
+    </form>
+</ion-view>
