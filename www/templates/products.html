@@ -26,7 +26,7 @@
               <ion-item ng-repeat="item in LstCat_Product  track by $index">
                 <div class="col3row">
                   <div class="col01" ng-click="opendescription(item)">
-                    <img ng-src="{{item.p_info.FileName}}" on-error-src="img/no-item-img-found.png" class="itemImg" alt="">
+                    <img ng-src="{{item.p_info.FileName}}" on-error-src="http://103.232.124.169:50000/MediaUploads/no-item-img-found.png" class="itemImg" alt="">
                     <div class="itemPrice">
                       <img src="img/rupee-indian.svg" class="inr" alt=""> {{item.DisplayPrice}} / {{item.Weight}}
                     </div>
@@ -104,7 +104,7 @@
             </button>
             </ion-header-bar>
             <ion-content>
-                <img ng-src="{{p_info.FileName}}" class="prodImg" on-error-src="img/no-item-img-found.png" alt="">
+                <img ng-src="{{p_info.FileName}}" class="prodImg" on-error-src="http://103.232.124.169:50000/MediaUploads/no-item-img-found.png" alt="">
                 <div class="row">
                     <div class="col">
                         <div class="fc-orange fw-600">Description :</div>

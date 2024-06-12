@@ -105,7 +105,7 @@ app.controller('ProductsCtrl', function($scope, $http, $ionicModal, $timeout, $l
                                 if (objProduct.product_picture_mappings.length > 0) {
                                     objProduct.FileName = Api_Url + "MediaUploads/" + objProduct.product_picture_mappings[0].tblmediamgmt.FileName;
                                 } else {
-                                    objProduct.FileName = "img/no-item-img-found.png";
+                                    objProduct.FileName = "http://103.232.124.169:50000/MediaUploads/no-item-img-found.png";
                                 }
                                 if (LstCat_Product_10[i].P_Attributes[0]?.productattributevalues?.length > 0) {
                                     LstCat_Product_10[i].Attribute = LstCat_Product_10[i].P_Attributes[0].Attribute.Name;

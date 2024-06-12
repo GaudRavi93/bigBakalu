@@ -181,7 +181,7 @@ app.controller('ProfileCtrl', function ($scope, $ionicModal, $ionicPopup, $timeo
             if (objproduct.product.product_picture_mappings.length > 0) {
                 var fileName = Api_Url + "MediaUploads/" + objproduct.product.product_picture_mappings[0].tblmediamgmt.FileName;
             } else {
-                var fileName = "img/no-item-img-found.png";
+                var fileName = "http://103.232.124.169:50000/MediaUploads/no-item-img-found.png";
             }
             var obj = {
                 ProductName: objproduct.product.Name,
